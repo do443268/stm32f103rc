@@ -141,6 +141,17 @@ Removing Unused input sections from the image.
     Removing misc.o(i.NVIC_SetVectorTable), (20 bytes).
     Removing misc.o(i.NVIC_SystemLPConfig), (32 bytes).
     Removing misc.o(i.SysTick_CLKSourceConfig), (40 bytes).
+    Removing stm32f10x_exti.o(.rev16_text), (4 bytes).
+    Removing stm32f10x_exti.o(.revsh_text), (4 bytes).
+    Removing stm32f10x_exti.o(.rrx_text), (6 bytes).
+    Removing stm32f10x_exti.o(i.EXTI_ClearFlag), (12 bytes).
+    Removing stm32f10x_exti.o(i.EXTI_ClearITPendingBit), (12 bytes).
+    Removing stm32f10x_exti.o(i.EXTI_DeInit), (36 bytes).
+    Removing stm32f10x_exti.o(i.EXTI_GenerateSWInterrupt), (16 bytes).
+    Removing stm32f10x_exti.o(i.EXTI_GetFlagStatus), (24 bytes).
+    Removing stm32f10x_exti.o(i.EXTI_GetITStatus), (40 bytes).
+    Removing stm32f10x_exti.o(i.EXTI_Init), (148 bytes).
+    Removing stm32f10x_exti.o(i.EXTI_StructInit), (16 bytes).
     Removing stm32f10x_gpio.o(.rev16_text), (4 bytes).
     Removing stm32f10x_gpio.o(.revsh_text), (4 bytes).
     Removing stm32f10x_gpio.o(.rrx_text), (6 bytes).
@@ -199,17 +210,6 @@ Removing Unused input sections from the image.
     Removing system_stm32f10x.o(.rrx_text), (6 bytes).
     Removing system_stm32f10x.o(i.SystemCoreClockUpdate), (164 bytes).
     Removing system_stm32f10x.o(.data), (20 bytes).
-    Removing stm32f10x_exti.o(.rev16_text), (4 bytes).
-    Removing stm32f10x_exti.o(.revsh_text), (4 bytes).
-    Removing stm32f10x_exti.o(.rrx_text), (6 bytes).
-    Removing stm32f10x_exti.o(i.EXTI_ClearFlag), (12 bytes).
-    Removing stm32f10x_exti.o(i.EXTI_ClearITPendingBit), (12 bytes).
-    Removing stm32f10x_exti.o(i.EXTI_DeInit), (36 bytes).
-    Removing stm32f10x_exti.o(i.EXTI_GenerateSWInterrupt), (16 bytes).
-    Removing stm32f10x_exti.o(i.EXTI_GetFlagStatus), (24 bytes).
-    Removing stm32f10x_exti.o(i.EXTI_GetITStatus), (40 bytes).
-    Removing stm32f10x_exti.o(i.EXTI_Init), (148 bytes).
-    Removing stm32f10x_exti.o(i.EXTI_StructInit), (16 bytes).
 
 80 unused section(s) (total 2448 bytes) removed from the image.
 
@@ -228,8 +228,8 @@ Image Symbol Table
     ../clib/angel/handlers.s                 0x00000000   Number         0  __scatter_zi.o ABSOLUTE
     ../clib/angel/kernel.s                   0x00000000   Number         0  rtexit.o ABSOLUTE
     ../clib/angel/kernel.s                   0x00000000   Number         0  __rtentry4.o ABSOLUTE
-    ../clib/angel/kernel.s                   0x00000000   Number         0  rtexit2.o ABSOLUTE
     ../clib/angel/kernel.s                   0x00000000   Number         0  __rtentry2.o ABSOLUTE
+    ../clib/angel/kernel.s                   0x00000000   Number         0  rtexit2.o ABSOLUTE
     ../clib/angel/kernel.s                   0x00000000   Number         0  __rtentry.o ABSOLUTE
     ../clib/angel/rt.s                       0x00000000   Number         0  rt_raise.o ABSOLUTE
     ../clib/angel/scatter.s                  0x00000000   Number         0  __scatter.o ABSOLUTE
@@ -251,20 +251,20 @@ Image Symbol Table
     ../clib/libinit.s                        0x00000000   Number         0  libshutdown2.o ABSOLUTE
     ../clib/libinit.s                        0x00000000   Number         0  libshutdown.o ABSOLUTE
     ../clib/libinit.s                        0x00000000   Number         0  libinit.o ABSOLUTE
+    ../clib/signal.c                         0x00000000   Number         0  defsig_general.o ABSOLUTE
     ../clib/signal.c                         0x00000000   Number         0  __raise.o ABSOLUTE
     ../clib/signal.c                         0x00000000   Number         0  defsig_exit.o ABSOLUTE
-    ../clib/signal.c                         0x00000000   Number         0  defsig_general.o ABSOLUTE
     ../clib/signal.c                         0x00000000   Number         0  defsig_rtmem_formal.o ABSOLUTE
     ../clib/signal.c                         0x00000000   Number         0  defsig_rtmem_outer.o ABSOLUTE
     ../clib/signal.c                         0x00000000   Number         0  defsig_rtmem_inner.o ABSOLUTE
     ../clib/signal.c                         0x00000000   Number         0  defsig_other.o ABSOLUTE
     ../clib/signal.c                         0x00000000   Number         0  defsig_segv_inner.o ABSOLUTE
     ../clib/signal.c                         0x00000000   Number         0  defsig_cppl_inner.o ABSOLUTE
-    ../clib/signal.c                         0x00000000   Number         0  defsig_pvfn_inner.o ABSOLUTE
     ../clib/signal.c                         0x00000000   Number         0  defsig_stak_inner.o ABSOLUTE
+    ../clib/signal.c                         0x00000000   Number         0  defsig_rtred_inner.o ABSOLUTE
     ../clib/signal.c                         0x00000000   Number         0  defsig_fpe_inner.o ABSOLUTE
     ../clib/signal.c                         0x00000000   Number         0  defsig_abrt_inner.o ABSOLUTE
-    ../clib/signal.c                         0x00000000   Number         0  defsig_rtred_inner.o ABSOLUTE
+    ../clib/signal.c                         0x00000000   Number         0  defsig_pvfn_inner.o ABSOLUTE
     ../clib/signal.s                         0x00000000   Number         0  defsig.o ABSOLUTE
     ../clib/stdlib.c                         0x00000000   Number         0  exit.o ABSOLUTE
     ../fplib/fpinit.s                        0x00000000   Number         0  fpinit.o ABSOLUTE
@@ -546,7 +546,7 @@ Memory Map of the image
 
     Base Addr    Size         Type   Attr      Idx    E Section Name        Object
 
-    0x08000000   0x00000130   Data   RO          469    RESET               startup_stm32f10x_hd.o
+    0x08000000   0x00000130   Data   RO          535    RESET               startup_stm32f10x_hd.o
     0x08000130   0x00000008   Code   RO          590  * !!!main             c_w.l(__main.o)
     0x08000138   0x00000034   Code   RO          746    !!!scatter          c_w.l(__scatter.o)
     0x0800016c   0x0000001c   Code   RO          748    !!handler_zi        c_w.l(__scatter_zi.o)
@@ -591,7 +591,7 @@ Memory Map of the image
     0x080001a4   0x00000004   Code   RO          670    .ARM.Collect$$rtexit$$00000003  c_w.l(rtexit2.o)
     0x080001a8   0x00000006   Code   RO          671    .ARM.Collect$$rtexit$$00000004  c_w.l(rtexit2.o)
     0x080001ae   0x00000002   PAD
-    0x080001b0   0x00000040   Code   RO          470  * .text               startup_stm32f10x_hd.o
+    0x080001b0   0x00000040   Code   RO          536  * .text               startup_stm32f10x_hd.o
     0x080001f0   0x00000006   Code   RO          588    .text               c_w.l(heapauxi.o)
     0x080001f6   0x0000004a   Code   RO          608    .text               c_w.l(sys_stackheap_outer.o)
     0x08000240   0x0000000c   Code   RO          610    .text               c_w.l(exit.o)
@@ -602,14 +602,14 @@ Memory Map of the image
     0x08000262   0x00000014   Code   RO            4    i.Delay_ms          main.o
     0x08000276   0x00000002   PAD
     0x08000278   0x00000040   Code   RO            5    i.GPIO_Configuration  main.o
-    0x080002b8   0x00000116   Code   RO          138    i.GPIO_Init         stm32f10x_gpio.o
-    0x080003ce   0x00000004   Code   RO          145    i.GPIO_ResetBits    stm32f10x_gpio.o
-    0x080003d2   0x00000004   Code   RO          146    i.GPIO_SetBits      stm32f10x_gpio.o
+    0x080002b8   0x00000116   Code   RO          204    i.GPIO_Init         stm32f10x_gpio.o
+    0x080003ce   0x00000004   Code   RO          211    i.GPIO_ResetBits    stm32f10x_gpio.o
+    0x080003d2   0x00000004   Code   RO          212    i.GPIO_SetBits      stm32f10x_gpio.o
     0x080003d6   0x00000002   PAD
-    0x080003d8   0x00000020   Code   RO          262    i.RCC_APB2PeriphClockCmd  stm32f10x_rcc.o
-    0x080003f8   0x00000008   Code   RO          477    i.SetSysClock       system_stm32f10x.o
-    0x08000400   0x000000e0   Code   RO          478    i.SetSysClockTo72   system_stm32f10x.o
-    0x080004e0   0x00000060   Code   RO          480    i.SystemInit        system_stm32f10x.o
+    0x080003d8   0x00000020   Code   RO          328    i.RCC_APB2PeriphClockCmd  stm32f10x_rcc.o
+    0x080003f8   0x00000008   Code   RO          543    i.SetSysClock       system_stm32f10x.o
+    0x08000400   0x000000e0   Code   RO          544    i.SetSysClockTo72   system_stm32f10x.o
+    0x080004e0   0x00000060   Code   RO          546    i.SystemInit        system_stm32f10x.o
     0x08000540   0x0000002c   Code   RO            6    i.main              main.o
     0x0800056c   0x00000010   Data   RO          744    Region$$Table       anon$$obj.o
 
@@ -624,8 +624,8 @@ Memory Map of the image
     Base Addr    Size         Type   Attr      Idx    E Section Name        Object
 
     0x20000000   0x00000060   Zero   RW          619    .bss                c_w.l(libspace.o)
-    0x20000060   0x00000200   Zero   RW          468    HEAP                startup_stm32f10x_hd.o
-    0x20000260   0x00000400   Zero   RW          467    STACK               startup_stm32f10x_hd.o
+    0x20000060   0x00000200   Zero   RW          534    HEAP                startup_stm32f10x_hd.o
+    0x20000260   0x00000400   Zero   RW          533    STACK               startup_stm32f10x_hd.o
 
 
 ==============================================================================

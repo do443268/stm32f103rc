@@ -22,16 +22,17 @@ Dialog DLL:      TCM.DLL V1.14.4.0
  
 <h2>Project:</h2>
 D:\stm32f103rc\GPIO\GPIO.uvprojx
-Project File Date:  05/10/2021
+Project File Date:  06/17/2021
 
 <h2>Output:</h2>
-Build target 'GPIO'
+Rebuild target 'GPIO'
 compiling main.c...
 compiling misc.c...
+compiling stm32f10x_exti.c...
 compiling stm32f10x_gpio.c...
 compiling stm32f10x_rcc.c...
+assembling startup_stm32f10x_hd.s...
 compiling system_stm32f10x.c...
-compiling stm32f10x_exti.c...
 linking...
 Program Size: Code=1084 RO-data=320 RW-data=0 ZI-data=1632  
 ".\Objects\GPIO.axf" - 0 Error(s), 0 Warning(s).
@@ -50,9 +51,9 @@ Package Vendor: Keil
                 STMicroelectronics STM32F1 Series Device Support, Drivers and Examples
    * Component: EXTI Version: 3.5.0
    * Component: RCC Version: 3.5.0
+   * Component: Framework Version: 3.5.1
    * Component: GPIO Version: 3.5.0
    * Component: Startup Version: 1.0.0
-   * Component: Framework Version: 3.5.1
 
 <h2>Collection of Component include folders:</h2>
   D:\stm32f103rc\GPIO\RTE
@@ -66,33 +67,33 @@ Package Vendor: Keil
 
    * Component: ARM::CMSIS:CORE:5.4.0
       Source file:   CMSIS\Core\Template\ARMv8-M\main_s.c
-      Source file:   CMSIS\Core\Template\ARMv8-M\tz_context.c
       Include file:  CMSIS\Core\Include\tz_context.h
+      Source file:   CMSIS\Core\Template\ARMv8-M\tz_context.c
 
    * Component: Keil::Device:StdPeriph Drivers:EXTI:3.5.0
       Include file:  Device\StdPeriph_Driver\inc\stm32f10x_exti.h
       Source file:   Device\StdPeriph_Driver\src\stm32f10x_exti.c
 
    * Component: Keil::Device:StdPeriph Drivers:RCC:3.5.0
-      Include file:  Device\StdPeriph_Driver\inc\stm32f10x_rcc.h
       Source file:   Device\StdPeriph_Driver\src\stm32f10x_rcc.c
-
-   * Component: Keil::Device:StdPeriph Drivers:GPIO:3.5.0
-      Include file:  Device\StdPeriph_Driver\inc\stm32f10x_gpio.h
-      Source file:   Device\StdPeriph_Driver\src\stm32f10x_gpio.c
-
-   * Component: Keil::Device:Startup:1.0.0
-      Source file:   Device\Source\system_stm32f10x.c
-      Source file:   Device\Source\ARM\startup_stm32f10x_hd.s
-      Source file:   Device\Source\ARM\STM32F1xx_OPT.s
-      Include file:  RTE_Driver\Config\RTE_Device.h
+      Include file:  Device\StdPeriph_Driver\inc\stm32f10x_rcc.h
 
    * Component: Keil::Device:StdPeriph Drivers:Framework:3.5.1
+      Source file:   Device\StdPeriph_Driver\src\misc.c
       Include file:  Device\StdPeriph_Driver\templates\stm32f10x_it.h
       Source file:   Device\StdPeriph_Driver\templates\stm32f10x_conf.h
       Include file:  Device\StdPeriph_Driver\inc\misc.h
       Source file:   Device\StdPeriph_Driver\templates\stm32f10x_it.c
-      Source file:   Device\StdPeriph_Driver\src\misc.c
+
+   * Component: Keil::Device:StdPeriph Drivers:GPIO:3.5.0
+      Source file:   Device\StdPeriph_Driver\src\stm32f10x_gpio.c
+      Include file:  Device\StdPeriph_Driver\inc\stm32f10x_gpio.h
+
+   * Component: Keil::Device:Startup:1.0.0
+      Source file:   Device\Source\ARM\startup_stm32f10x_hd.s
+      Include file:  RTE_Driver\Config\RTE_Device.h
+      Source file:   Device\Source\system_stm32f10x.c
+      Source file:   Device\Source\ARM\STM32F1xx_OPT.s
 </pre>
 </body>
 </html>
