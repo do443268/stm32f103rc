@@ -19,6 +19,7 @@ void delay_us_4(unsigned int time) {
    while(time--)
 	 {
      TIM4->CNT = 0;
+		 TIM4->CCR4 = 10000/2;
      while (TIM4->CNT < 1) {}
 	 }
 }
@@ -73,7 +74,7 @@ void TIM4_config(void) // timer 4 config
 	
 	TimerInit.TIM_CounterMode = TIM_CounterMode_Up; // mode dem len
 	TimerInit.TIM_Period = 1; // bo chia
-	TimerInit.TIM_Prescaler = SystemCoreClock / 1000000 - 1;//  gia tri dem nap vao timer (0x0000 -> 0xffff)
+	TimerInit.TIM_Prescaler = SystemCoreClock / 1000000 - 1;//  gia tri dem nap vao timer (0x0000 -> 0xffff) 72
 	
 	TimerInit.TIM_ClockDivision = TIM_CKD_DIV1; // chia clock
   TimerInit.TIM_RepetitionCounter = 0; // gia tri bo dem lap lai
@@ -81,4 +82,6 @@ void TIM4_config(void) // timer 4 config
 	
 	TIM_Cmd(TIM4,ENABLE); // chay bo dem
 }
+
+//void pwm
 
