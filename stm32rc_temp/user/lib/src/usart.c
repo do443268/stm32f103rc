@@ -1,5 +1,4 @@
 /**	
- * |----------------------------------------------------------------------
  * | 	Pins_PA9PA10,	//USART1
 			Pins_PB6PB7,	////USART1
 			Pins_PA2PA3,	//USART2
@@ -14,20 +13,6 @@
 			Pins_PB8PE7,	//UART7
 			Pins_PF7PF6,	//UART7
 			Pins_PE1PE0		//UART8
- * | 
- * | This program is free software: you can redistribute it and/or modify
- * | it under the terms of the GNU General Public License as published by
- * | the Free Software Foundation, either version 3 of the License, or
- * | any later version.
- * |  
- * | This program is distributed in the hope that it will be useful,
- * | but WITHOUT ANY WARRANTY; without even the implied warranty of
- * | MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * | GNU General Public License for more details.
- * | 
- * | You should have received a copy of the GNU General Public License
- * | along with this program.  If not, see <http://www.gnu.org/licenses/>.
- * |----------------------------------------------------------------------
  */
 #include "usart.h"
 #include "stdio.h"
@@ -95,7 +80,7 @@ int8_t UART8_Buffer[UART8_BUFFER_SIZE];
 #endif
 
 #ifdef USE_USART1
-USART_t F4_USART1 = {USART1_Buffer, USART1_BUFFER_SIZE, 0, 0, 0};
+USART_t F4_USART1 = {USART1_Buffer, USART1_BUFFER_SIZE, 0, 0, 0}; // {Buffer,Size,Num,In,Out}
 #endif
 #ifdef USE_USART2
 USART_t F4_USART2 = {USART2_Buffer, USART2_BUFFER_SIZE, 0, 0, 0};
@@ -135,12 +120,7 @@ uint8_t USART_INT_GetSubPriority(USART_TypeDef* USARTx);
 uint8_t USART_BufferFull(USART_TypeDef* USARTx);
 
 void USARTx_Init(USART_TypeDef* USARTx, USART_PinsPack_t pinspack, uint32_t baudrate) {
-	/**
-	 * Initialization structures declared
-	 *
-	 * USART: Universal Synchronous/Asynchronous Receiver/Transmitter
-	 * NVIC: Nested Vector Interrupt Controller
-	 */
+	
 	USART_InitTypeDef 	USART_InitStruct;
 	NVIC_InitTypeDef	NVIC_InitStruct;
 
@@ -160,7 +140,7 @@ void USARTx_Init(USART_TypeDef* USARTx, USART_PinsPack_t pinspack, uint32_t baud
 	 * Set 1 stop bit
 	 * Set Data bits to 8
 	 */
-	USART_InitStruct.USART_BaudRate = baudrate;
+	USART_InitStruct.USART_BaudRate = baudrate; //baudrate
 	
 	/*
 	 * Initialize USARTx pins
@@ -168,14 +148,14 @@ void USARTx_Init(USART_TypeDef* USARTx, USART_PinsPack_t pinspack, uint32_t baud
 	 */
 #ifdef USE_USART1
 	if (USARTx == USART1) {
-		USART1_InitPins(pinspack);
-		NVIC_InitStruct.NVIC_IRQChannel = USART1_IRQn;
-		
-		USART_InitStruct.USART_HardwareFlowControl = USART1_HARDWARE_FLOW_CONTROL;
-		USART_InitStruct.USART_Mode = USART1_MODE;
-		USART_InitStruct.USART_Parity = USART1_PARITY;
-		USART_InitStruct.USART_StopBits = USART1_STOP_BITS;
-		USART_InitStruct.USART_WordLength = USART1_WORD_LENGTH;
+		USART1_InitPins(pinspack); // config USART PinsPack TX || RX
+		NVIC_InitStruct.NVIC_IRQChannel = USART1_IRQn; // Channel ngat
+		// USART_InitStruct
+		USART_InitStruct.USART_HardwareFlowControl = USART1_HARDWARE_FLOW_CONTROL; // 
+		USART_InitStruct.USART_Mode = USART1_MODE; // mode truyen or nhan
+		USART_InitStruct.USART_Parity = USART1_PARITY; // bit chan le
+		USART_InitStruct.USART_StopBits = USART1_STOP_BITS;//stop bit
+		USART_InitStruct.USART_WordLength = USART1_WORD_LENGTH;//bit truyen trong 1 khung truyen
 	}
 #endif
 #ifdef USE_USART2
@@ -252,18 +232,18 @@ void USARTx_Init(USART_TypeDef* USARTx, USART_PinsPack_t pinspack, uint32_t baud
 	}
 #endif
 	
-	/* Disable */
+	/* Disable usart*/
 	USART_Cmd(USARTx, DISABLE);
 	/* Deinit first */
-	USART_DeInit(USARTx);
+	USART_DeInit(USARTx); // reset gia tri thanh ghi
 	
-	/* Init */
-	USART_Init(USARTx, &USART_InitStruct);
-	/* Enable */
+	/* Init thong so USART_InitStruct */
+	USART_Init(USARTx, &USART_InitStruct); 
+	/* Enable usart */
 	USART_Cmd(USARTx, ENABLE);
 	
 	/* Enable RX interrupt */
-	USART_ITConfig(USARTx, USART_IT_RXNE, ENABLE);
+	USART_ITConfig(USARTx, USART_IT_RXNE, ENABLE); // Bat hoac tat các ngat USART duoc chi dinh.
 
 	/**
 	 * Set Channel Cmd to enable. That will enable USARTx channel in NVIC
@@ -271,16 +251,17 @@ void USARTx_Init(USART_TypeDef* USARTx, USART_PinsPack_t pinspack, uint32_t baud
 	 * USARTx with lower x has high subpriority
 	 *
 	 * Initialize NVIC
+	 * cau hinh NVIC cho uart
 	 */
-	NVIC_InitStruct.NVIC_IRQChannelCmd = ENABLE;
-	NVIC_InitStruct.NVIC_IRQChannelPreemptionPriority = USART_NVIC_PRIORITY;
-	NVIC_InitStruct.NVIC_IRQChannelSubPriority = USART_INT_GetSubPriority(USARTx);
+	NVIC_InitStruct.NVIC_IRQChannelCmd = ENABLE; // ENABLE Channel NVIC
+	NVIC_InitStruct.NVIC_IRQChannelPreemptionPriority = USART_NVIC_PRIORITY; // do uu tien 
+	NVIC_InitStruct.NVIC_IRQChannelSubPriority = USART_INT_GetSubPriority(USARTx);// ?
 	NVIC_Init(&NVIC_InitStruct);
 }
 
 uint8_t USART_Getc(USART_TypeDef* USARTx) {
 	int8_t c = 0;
-	USART_t* u = USART_INT_GetUsart(USARTx);
+	USART_t* u = USART_INT_GetUsart(USARTx); // {Buffer,Size,Num,In,Out}
 	
 	/* Check if we have any data in buffer */
 	if (u->Num > 0) {
@@ -326,7 +307,7 @@ uint16_t USART_Gets(USART_TypeDef* USARTx, char* buffer, uint16_t bufsize) {
 	return (i);
 }
 
-uint8_t USART_BufferEmpty(USART_TypeDef* USARTx) {
+uint8_t USART_BufferEmpty(USART_TypeDef* USARTx) { //USART BufferEmpty
 	USART_t* u = USART_INT_GetUsart(USARTx);
 	return (u->Num == 0);
 }
@@ -378,9 +359,9 @@ void USART_Puts(USART_TypeDef* USARTx, char* str) {
 
 void USART_Putc(USART_TypeDef* USARTx, volatile char c) {
 	/* Wait to be ready */
-	while (!USART_GetFlagStatus(USARTx, USART_FLAG_TXE));
+	while (!USART_GetFlagStatus(USARTx, USART_FLAG_TXE)); // check co USART_FLAG_TXE trong de truyen
 	/* Send data */
-	USARTx->DR = (uint16_t)(c & 0x01FF);
+	USARTx->DR = (uint16_t)(c & 0x01FF); 
 }
 
 /* Private functions */
@@ -487,44 +468,38 @@ uint8_t USART_INT_GetSubPriority(USART_TypeDef* USARTx) {
 #ifdef USE_USART1
 void USART1_InitPins(USART_PinsPack_t pinspack) {	
 	//Enable clock for USART1
-
+	RCC_APB2PeriphClockCmd( RCC_APB2Periph_USART1,ENABLE);	//Enable clock for USART1
 	if (pinspack == Pins_PA9PA10) {
 		// Enable clock for GPIOA
-		//RCC_APB2PeriphClockCmd( RCC_APB2Periph_GPIOA , ENABLE);
-		RCC_APB2PeriphClockCmd(RCC_APB2Periph_AFIO, ENABLE);
-		RCC_APB2PeriphClockCmd( RCC_APB2Periph_USART1,ENABLE);
-//		Configure USART1 Tx (PA.09) as alternate function push-pull 
-//		GPIO_InitStruct.GPIO_Pin = GPIO_Pin_9;
-//		GPIO_InitStruct.GPIO_Mode = GPIO_Mode_AF_PP; 
-//		GPIO_InitStruct.GPIO_Speed = GPIO_Speed_50MHz;
-//		GPIO_Init(GPIOA, &GPIO_InitStruct);
+		RCC_APB2PeriphClockCmd( RCC_APB2Periph_GPIOA , ENABLE); //Enable clock port
+		RCC_APB2PeriphClockCmd(RCC_APB2Periph_AFIO, ENABLE);	//Enable clock for USART1
+		
+		//Configure USART1 Tx (PA.09) as alternate function push-pull 
+		GPIO_InitStruct.GPIO_Pin = GPIO_Pin_9;
+		GPIO_InitStruct.GPIO_Mode = GPIO_Mode_AF_PP; 
+		GPIO_InitStruct.GPIO_Speed = GPIO_Speed_50MHz;
+		GPIO_Init(GPIOA, &GPIO_InitStruct);
 
-//		Configure USART1 Rx (PA.10) as input floating 
-//		GPIO_InitStruct.GPIO_Pin = GPIO_Pin_10;
-//		GPIO_InitStruct.GPIO_Mode = GPIO_Mode_IN_FLOATING;
-//		GPIO_Init(GPIOA, &GPIO_InitStruct);
-
-		GPIO_Set(GPIOA,Pin_9,Mode_AF_PP,Speed_50MHz); // tx
-		GPIO_Set(GPIOA,Pin_10,Mode_IN_FLOATING,Speed_50MHz);	// rx
-
+		//Configure USART1 Rx (PA.10) as input floating 
+		GPIO_InitStruct.GPIO_Pin = GPIO_Pin_10;
+		GPIO_InitStruct.GPIO_Mode = GPIO_Mode_IN_FLOATING;
+		GPIO_Init(GPIOA, &GPIO_InitStruct);
 
 	} else if (pinspack == Pins_PB6PB7) {
-// Enable clock for GPIOB
-		//RCC_APB2PeriphClockCmd( RCC_APB2Periph_GPIOB , ENABLE);
-		RCC_APB2PeriphClockCmd( RCC_APB2Periph_USART1,ENABLE);
-//		Configure USART1 Tx (P) as alternate function push-pull 
-//		GPIO_InitStruct.GPIO_Pin = GPIO_Pin_6;
-//		GPIO_InitStruct.GPIO_Mode = GPIO_Mode_AF_PP; 
-//		GPIO_InitStruct.GPIO_Speed = GPIO_Speed_50MHz;
-//		GPIO_Init(GPIOB, &GPIO_InitStruct);
+		// Enable clock for GPIOB
+		RCC_APB2PeriphClockCmd( RCC_APB2Periph_GPIOB , ENABLE);
+		RCC_APB2PeriphClockCmd(RCC_APB2Periph_AFIO, ENABLE);	//
+		//Configure USART1 Tx (P) as alternate function push-pull 
+		GPIO_InitStruct.GPIO_Pin = GPIO_Pin_6;
+		GPIO_InitStruct.GPIO_Mode = GPIO_Mode_AF_PP; 
+		GPIO_InitStruct.GPIO_Speed = GPIO_Speed_50MHz;
+		GPIO_Init(GPIOB, &GPIO_InitStruct);
 
-//		Configure USART1 Rx (P) as input floating 
-//		GPIO_InitStruct.GPIO_Pin = GPIO_Pin_7;
-//		GPIO_InitStruct.GPIO_Mode = GPIO_Mode_IN_FLOATING;
-//		GPIO_Init(GPIOB, &GPIO_InitStruct);
+		//Configure USART1 Rx (P) as input floating 
+		GPIO_InitStruct.GPIO_Pin = GPIO_Pin_7;
+		GPIO_InitStruct.GPIO_Mode = GPIO_Mode_IN_FLOATING;
+		GPIO_Init(GPIOB, &GPIO_InitStruct);
 		
-		GPIO_Set(GPIOB,Pin_6,Mode_AF_PP,Speed_50MHz); // tx
-		GPIO_Set(GPIOB,Pin_7,Mode_IN_FLOATING,Speed_50MHz);	// rx
 	}
 }
 #endif
@@ -535,39 +510,32 @@ void USART2_InitPins(USART_PinsPack_t pinspack) {
 	RCC_APB1PeriphClockCmd(RCC_APB1Periph_USART2, ENABLE);
 
 	if (pinspack == Pins_PA2PA3) {
-		// Enable clock for GPIOA
-		 //RCC_APB2PeriphClockCmd( RCC_APB2Periph_GPIOA , ENABLE);
+		 // Enable clock for GPIOA
+		 RCC_APB2PeriphClockCmd( RCC_APB2Periph_GPIOA , ENABLE);
 		 RCC_APB1PeriphClockCmd(RCC_APB1Periph_USART2,ENABLE);
-//      //Configure USART2 Tx (PA.02) as alternate function push-pull 
-//     GPIO_InitStruct.GPIO_Pin = GPIO_Pin_2;
-//     GPIO_InitStruct.GPIO_Mode = GPIO_Mode_AF_PP;   
-//     GPIO_InitStruct.GPIO_Speed = GPIO_Speed_50MHz;
-//     GPIO_Init(GPIOA, &GPIO_InitStruct);
-//     //Configure USART2 Rx (PA.03) as input floating 
-//     GPIO_InitStruct.GPIO_Pin = GPIO_Pin_3;
-//     GPIO_InitStruct.GPIO_Mode = GPIO_Mode_IN_FLOATING;
-//     GPIO_Init(GPIOA, &GPIO_InitStruct);
-		
-		GPIO_Set(GPIOA,Pin_2,Mode_AF_PP,Speed_50MHz); // tx
-		GPIO_Set(GPIOA,Pin_3,Mode_IN_FLOATING,Speed_50MHz);	// rx
+     //Configure USART2 Tx (PA.02) as alternate function push-pull 
+     GPIO_InitStruct.GPIO_Pin = GPIO_Pin_2;
+     GPIO_InitStruct.GPIO_Mode = GPIO_Mode_AF_PP;   
+     GPIO_InitStruct.GPIO_Speed = GPIO_Speed_50MHz;
+     GPIO_Init(GPIOA, &GPIO_InitStruct);
+     //Configure USART2 Rx (PA.03) as input floating 
+     GPIO_InitStruct.GPIO_Pin = GPIO_Pin_3;
+     GPIO_InitStruct.GPIO_Mode = GPIO_Mode_IN_FLOATING;
+     GPIO_Init(GPIOA, &GPIO_InitStruct);
 		
 	} else if (pinspack == Pins_PD5PD6) {
-		// Enable clock for GPIOD
-		 //RCC_APB2PeriphClockCmd( RCC_APB2Periph_GPIOD , ENABLE);
+		 // Enable clock for GPIOD
+		 RCC_APB2PeriphClockCmd( RCC_APB2Periph_GPIOD , ENABLE);
 		 RCC_APB1PeriphClockCmd( RCC_APB1Periph_USART2,ENABLE);
-      //Configure USART2 Tx (P) as alternate function push-pull 
-//     GPIO_InitStruct.GPIO_Pin = GPIO_Pin_5;
-//     GPIO_InitStruct.GPIO_Mode = GPIO_Mode_AF_PP;   
-//     GPIO_InitStruct.GPIO_Speed = GPIO_Speed_50MHz;
-//     GPIO_Init(GPIOD, &GPIO_InitStruct);
-//     //Configure USART2 Rx (P) as input floating 
-//     GPIO_InitStruct.GPIO_Pin = GPIO_Pin_6;
-//     GPIO_InitStruct.GPIO_Mode = GPIO_Mode_IN_FLOATING;
-//     GPIO_Init(GPIOD, &GPIO_InitStruct);
-
-		GPIO_Set(GPIOD,Pin_5,Mode_AF_PP,Speed_50MHz); // tx
-		GPIO_Set(GPIOD,Pin_6,Mode_IN_FLOATING,Speed_50MHz);	// rx
-		
+     //Configure USART2 Tx (P) as alternate function push-pull 
+     GPIO_InitStruct.GPIO_Pin = GPIO_Pin_5;
+     GPIO_InitStruct.GPIO_Mode = GPIO_Mode_AF_PP;   
+     GPIO_InitStruct.GPIO_Speed = GPIO_Speed_50MHz;
+     GPIO_Init(GPIOD, &GPIO_InitStruct);
+     //Configure USART2 Rx (P) as input floating 
+     GPIO_InitStruct.GPIO_Pin = GPIO_Pin_6;
+     GPIO_InitStruct.GPIO_Mode = GPIO_Mode_IN_FLOATING;
+     GPIO_Init(GPIOD, &GPIO_InitStruct);		
 	}
 }
 #endif
@@ -580,58 +548,48 @@ void USART3_InitPins(USART_PinsPack_t pinspack) {
 	if (pinspack == Pins_PB10PB11) {
 		
 		// Enable clock for GPIOB
-		//RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOB, ENABLE);
+		RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOB, ENABLE);
 		RCC_APB2PeriphClockCmd( RCC_APB1Periph_USART3,ENABLE);
 		//Configure USART1 Tx (P) as alternate function push-pull 
-//     GPIO_InitStruct.GPIO_Pin = GPIO_Pin_10;
-//     GPIO_InitStruct.GPIO_Mode = GPIO_Mode_AF_PP; 
-//     GPIO_InitStruct.GPIO_Speed = GPIO_Speed_50MHz;
-//     GPIO_Init(GPIOB, &GPIO_InitStruct);
+		GPIO_InitStruct.GPIO_Pin = GPIO_Pin_10;
+		GPIO_InitStruct.GPIO_Mode = GPIO_Mode_AF_PP; 
+		GPIO_InitStruct.GPIO_Speed = GPIO_Speed_50MHz;
+		GPIO_Init(GPIOB, &GPIO_InitStruct);
 
-//		// Configure USART1 Rx (P) as input floating 
-//     GPIO_InitStruct.GPIO_Pin = GPIO_Pin_11;
-//     GPIO_InitStruct.GPIO_Mode = GPIO_Mode_IN_FLOATING;
-//     GPIO_Init(GPIOB, &GPIO_InitStruct);
-		
-		GPIO_Set(GPIOB,Pin_10,Mode_AF_PP,Speed_50MHz); // tx
-		GPIO_Set(GPIOB,Pin_11,Mode_IN_FLOATING,Speed_50MHz);	// rx
-		
-		
+		// Configure USART1 Rx (P) as input floating 
+		GPIO_InitStruct.GPIO_Pin = GPIO_Pin_11;
+		GPIO_InitStruct.GPIO_Mode = GPIO_Mode_IN_FLOATING;
+		GPIO_Init(GPIOB, &GPIO_InitStruct);
+				
 	} else if (pinspack == Pins_PC10PC11) {
 		// Enable clock for GPIOC
-		//RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOC, ENABLE);
+		RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOC, ENABLE);
 		RCC_APB2PeriphClockCmd( RCC_APB1Periph_USART3,ENABLE);
 		//Configure USART1 Tx (P) as alternate function push-pull 
-//     GPIO_InitStruct.GPIO_Pin = GPIO_Pin_10;
-//     GPIO_InitStruct.GPIO_Mode = GPIO_Mode_AF_PP; 
-//     GPIO_InitStruct.GPIO_Speed = GPIO_Speed_50MHz;
-//     GPIO_Init(GPIOC, &GPIO_InitStruct);
+		GPIO_InitStruct.GPIO_Pin = GPIO_Pin_10;
+		GPIO_InitStruct.GPIO_Mode = GPIO_Mode_AF_PP; 
+		GPIO_InitStruct.GPIO_Speed = GPIO_Speed_50MHz;
+		GPIO_Init(GPIOC, &GPIO_InitStruct);
 
-//		// Configure USART1 Rx (P) as input floating 
-//     GPIO_InitStruct.GPIO_Pin = GPIO_Pin_11;
-//     GPIO_InitStruct.GPIO_Mode = GPIO_Mode_IN_FLOATING;
-//     GPIO_Init(GPIOC, &GPIO_InitStruct);
-		
-		GPIO_Set(GPIOC,Pin_10,Mode_AF_PP,Speed_50MHz); // tx
-		GPIO_Set(GPIOC,Pin_11,Mode_IN_FLOATING,Speed_50MHz);	// rx
-		
+		// Configure USART1 Rx (P) as input floating 
+		GPIO_InitStruct.GPIO_Pin = GPIO_Pin_11;
+		GPIO_InitStruct.GPIO_Mode = GPIO_Mode_IN_FLOATING;
+		GPIO_Init(GPIOC, &GPIO_InitStruct);
+	
 	} else if (pinspack == Pins_PD8PD9) {
-		// Enable clock for GPIOD
-		//RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOD, ENABLE);
+		//Enable clock for GPIOD
+		RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOD, ENABLE);
 		RCC_APB2PeriphClockCmd( RCC_APB1Periph_USART3,ENABLE);
 		//Configure USART1 Tx (P) as alternate function push-pull 
-//     GPIO_InitStruct.GPIO_Pin = GPIO_Pin_8;
-//     GPIO_InitStruct.GPIO_Mode = GPIO_Mode_AF_PP; 
-//     GPIO_InitStruct.GPIO_Speed = GPIO_Speed_50MHz;
-//     GPIO_Init(GPIOD, &GPIO_InitStruct);
+		GPIO_InitStruct.GPIO_Pin = GPIO_Pin_8;
+		GPIO_InitStruct.GPIO_Mode = GPIO_Mode_AF_PP; 
+		GPIO_InitStruct.GPIO_Speed = GPIO_Speed_50MHz;
+		GPIO_Init(GPIOD, &GPIO_InitStruct);
 
-//		// Configure USART1 Rx (P) as input floating 
-//     GPIO_InitStruct.GPIO_Pin = GPIO_Pin_9;
-//     GPIO_InitStruct.GPIO_Mode = GPIO_Mode_IN_FLOATING;
-//     GPIO_Init(GPIOD, &GPIO_InitStruct);
-		
-		GPIO_Set(GPIOD,Pin_8,Mode_AF_PP,Speed_50MHz); // tx
-		GPIO_Set(GPIOD,Pin_9,Mode_IN_FLOATING,Speed_50MHz);	// rx
+		// Configure USART1 Rx (P) as input floating 
+		GPIO_InitStruct.GPIO_Pin = GPIO_Pin_9;
+		GPIO_InitStruct.GPIO_Mode = GPIO_Mode_IN_FLOATING;
+		GPIO_Init(GPIOD, &GPIO_InitStruct);
 		
 	}
 }
@@ -718,10 +676,10 @@ void UART8_InitPins(USART_PinsPack_t pinspack) {
 #ifdef USE_USART1
 void USART1_IRQHandler(void) {
 	//Check if interrupt was because data is received
-	if (USART_GetITStatus(USART1, USART_IT_RXNE)) {
+	if (USART_GetITStatus(USART1, USART_IT_RXNE)) { // check co ngat
 		#ifdef USART1_USE_CUSTOM_IRQ
 			//Call user function
-			USART1_ReceiveHandler(USART1->DR);
+			USART1_ReceiveHandler(USART1->DR); // ghi data vao thanh ghi DR
 		#else
 			//Put received data into internal buffer
 			USART_INT_InsertToBuffer(&F4_USART1, USART1->DR);
@@ -778,10 +736,10 @@ void UART4_IRQHandler(void) {
 #ifdef USE_UART5
 void UART5_IRQHandler(void) {
 	//Check if interrupt was because data is received
-	if (USART_GetITStatus(UART5, USART_IT_RXNE)) {
+	if (USART_GetITStatus(UART5, USART_IT_RXNE)) { // check co ngat
 		#ifdef UART5_USE_CUSTOM_IRQ
 			//Call user function
-			UART5_ReceiveHandler(UART5->DR);
+			UART5_ReceiveHandler(UART5->DR); // ghi data vao thanh ghi DR
 		#else
 			//Put received data into internal buffer
 			USART_INT_InsertToBuffer(&F4_UART5, UART5->DR);

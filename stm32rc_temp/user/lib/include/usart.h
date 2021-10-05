@@ -64,8 +64,8 @@
 //#include "stdio.h"
 
 
-
-#if defined (STM32F10X_HD)
+// STM3232f103rct6,STM3232f103c8t6
+#if defined (STM32F10X_HD) //define chip flash
 #define USE_USART1
 #define USE_USART2
 #define USE_USART3
@@ -97,7 +97,7 @@
 
 /* Default buffer size for each USART */
 #ifndef USART_BUFFER_SIZE
-#define USART_BUFFER_SIZE 				200
+#define USART_BUFFER_SIZE 				200 
 #endif
 
 /* Set default buffer size for specific USART if not set by user */
@@ -128,7 +128,7 @@
 
 /* NVIC Priority */
 #ifndef USART_NVIC_PRIORITY
-#define USART_NVIC_PRIORITY				0x00
+#define USART_NVIC_PRIORITY				0x00 // do uu tien
 #endif
 
 //U(S)ART settings, can be changed in your defines.h project file
@@ -273,12 +273,12 @@
  *
  * 
  */
-typedef enum {
-	Pins_PA9PA10,	//USART1
+typedef enum { // USART PinsPack TX || RX
+	Pins_PA9PA10,	//USART1 (F103RC)
 	Pins_PB6PB7,	////USART1
-	Pins_PA2PA3,	//USART2
+	Pins_PA2PA3,	//USART2 (F103RC)
 	Pins_PD5PD6,	//USART2
-	Pins_PB10PB11,	//USART3
+	Pins_PB10PB11,	//USART3 (F103RC)
 	Pins_PC10PC11,	//USART3//UART4
 	Pins_PD8PD9,	//USART3
 	Pins_PA0PA1,	//UART4
@@ -300,7 +300,7 @@ typedef enum {
  
  *	- uint32_t baudrate: baudrate for USARTx
  */
-extern void USARTx_Init(USART_TypeDef* USARTx, USART_PinsPack_t pinspack, uint32_t baudrate);
+extern void USARTx_Init(USART_TypeDef* USARTx, USART_PinsPack_t pinspack, uint32_t baudrate); // 
 
 /**
  * Put character to USARTx
